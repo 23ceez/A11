@@ -51,6 +51,7 @@ header {
 	border-bottom: 2px solid var(--accent-color);
 	background-image: linear-gradient(
 	    30deg, var(--gradient-color) 0%, white 30%, white 65%, var(--gradient-color) 100%);
+	text-align: center;
 	& h2 {
 		font-size: 175%;
 		padding: .5em 0 0 0;
@@ -61,9 +62,7 @@ header {
 		padding-bottom: 1em;
 	}
 	& img {
-		width: clamp(40px, 15%, 80px);
-		float: left;
-		margin: .75em 1em;
+		display:none;
 	}
 }
 
@@ -71,6 +70,7 @@ header {
 main {
 	display: flex;
 	padding: 0 1em 1em;
+	flex-direction: column-reverse;
 	& blockquote {
 		font-style: italic;
 		padding-left: 1em;
@@ -84,8 +84,8 @@ main {
 
 /* the styles for the section */
 section {
-	flex-basis: 75%;
 	padding-left: .5em;
+	border-bottom: var(--accent-color) 2px solid;
 	& img {
 		width: clamp(100px, 50%, 250px);
 		float: right;
@@ -95,7 +95,6 @@ section {
 
 /* the styles for the aside */
 aside {
-	flex-basis: 25%;
 	padding-right: .5em;
 }
 
@@ -132,22 +131,22 @@ footer {
 
 /* styles for the menu */
 .menu {
-	display: flex;
-	flex-wrap: wrap;
-	& li { 
-		flex-basis: 20%; 
-		text-align: center;
-	}
+	position: absolute;
+	left: 0;
+	background-color: var(--accent-color);
+	width: 40%;
+	display:none;
 }
 
 .navbar {
 	clear: left;
+	position: relative;
 	background-color: var(--accent-color);
 	& a {
 		display: block;
 		padding: 1em;
 		text-decoration: none;
-		margin: 0 1px 2px;
+		margin: 0 2px 2px 0;
 	}
 	& a:link, a:visited { 
 		color: var(--light_menu);
@@ -166,16 +165,23 @@ footer {
 .submenu {
 	position: relative;
 	& small { margin-left: .25em; }
+	& small::before{
+		content: "▼";
+		display: inline-block;
+		font-size: 0.75em;
+		line-height: 1;
+	}
 }
 
 .dropdown {
 	position: absolute;
-	left: 0;
-	right: 0;
+	top: 0;
+	left: 100%;
+	width: 100%;
 	background-color: var(--accent-color);
 	color: var(--light_menu);
 	display: none;
-	& > li a { margin: 0 2px 2px; }
+	& > li a { margin:2px; }
 }
 
 .submenu:hover > .dropdown {
@@ -184,3 +190,115 @@ footer {
 
 .menu > li:first-child a { margin-left: 0; }
 .menu > li:last-child a { margin-right: 0; }
+
+.menu-btn {
+	display: block;
+	background-color: var(--accent-color);
+	color: var(--light_menu);
+	padding: 1em;
+	position: relative;
+	height: 50px;
+}
+
+.menu-btn::before {
+	content: "☰";
+	display: block;
+	font-size: 1.5em;
+	line-height: 1;
+}
+
+/* visually hide the checkbox but keep it operable via the label */
+#menu-toggle {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	white-space: nowrap;
+}
+
+#menu-toggle:checked ~ .menu {
+	display: block;
+}
+
+@media(min-width: 765px) {
+	.menu {
+		display: flex;
+		position: relative;
+		width: 100%;
+		& li { 
+			flex-basis: 20%; 
+			text-align: center;
+			display: inline-block
+		}
+	}
+
+	.menu-btn{
+		display: none;
+	}
+
+	#menu-toggle{
+		display: none;
+	}
+
+	.submenu {
+	& small { 
+		margin-left: .25em;
+		display: inline-block
+	}
+	& small::before{
+		content: "▼";
+		display: inline-block;
+		font-size: 0.75em;
+		line-height: 1;
+	}
+}
+
+.dropdown {
+	top: auto;
+	left: 0;
+	right: 0;
+	& > li a { margin: 0 2px 2px; }
+}
+.submenu:hover > .dropdown {
+	display: block;
+}
+
+.menu > li:first-child a { margin-left: 0; }
+.menu > li:last-child a { margin-right: 0; }
+
+.navbar {
+	& a {
+		margin: 0 1px 2px;
+	}
+}
+
+}
+
+@media(min-width: 900px) {
+	main {
+		flex-direction: row;
+	}
+
+	section {
+		flex-basis: 75%;
+	}
+
+	aside {
+		flex-basis: 25%;
+	}
+
+}
+
+@media(min-width: 524px) {
+	header {
+		text-align: left;
+	& img {
+		width: clamp(40px, 15%, 80px);
+		float: left;
+		margin: .75em 1em;
+		display: block;
+	}
+}
+}
